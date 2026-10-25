@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#fef3e2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="description" content="Clannad Fan Site - 家族的爱与温暖">
+    <title>Clannad ~ 家族 ~ 温暖的记忆</title>
+    <style>
+        /* ========== Clannad主题配色 ========== */
+        :root {
+            --primary: #e8a87c;
+            --primary-light: #f5c99d;
+            --primary-dark: #d4956a;
+            --nagisa: #a8d8b9;
+            --nagisa-light: #c5e8d0;
+            --nagisa-dark: #7bc492;
+            --sakura: #ffb7c5;
+            --sakura-light: #ffd1dc;
+            --sakura-dark: #ff9aac;
+            --bg-primary: #fef9f3;
+            --bg-secondary: #fff8f0;
+            --bg-tertiary: #fef3e2;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --text-primary: #5d4e37;
+            --text-secondary: #8b7355;
+            --text-muted: #a89880;
+            --gradient-warm: linear-gradient(135deg, #e8a87c 0%, #ffb7c5 100%);
+            --gradient-sky: linear-gradient(135deg, #87ceeb 0%, #a8d8b9 100%);
+            --gradient-hero: linear-gradient(180deg, #fff5eb 0%, #fef3e2 50%, #fffcf7 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(232, 168, 124, 0.2);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --shadow-soft: 0 4px 20px rgba(232, 168, 124, 0.15);
+            --shadow-glow: 0 8px 40px rgba(232, 168, 124, 0.2);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #2d2a3e;
+            --bg-secondary: #363349;
+            --bg-tertiary: #3d3a52;
+            --bg-card: rgba(54, 51, 73, 0.85);
+            --text-primary: #f5ebe0;
+            --text-secondary: #c9beb0;
+            --text-muted: #9a9084;
+            --glass-bg: rgba(54, 51, 73, 0.8);
+            --glass-border: rgba(168, 216, 185, 0.2);
+            --gradient-hero: linear-gradient(180deg, #2d2a3e 0%, #363349 50%, #3d3a52 100%);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Hiragino Maru Gothic ProN', 'ヒラギノ丸ゴ ProN', 'Yu Gothic', 'Meiryo', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+        ::selection { background: var(--sakura-light); color: var(--text-primary); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+        /* ========== 樱花飘落动画 - 修复层级 ========== */
+        .sakura-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+        .sakura-petal {
+            position: absolute;
+            width: 12px; height: 12px;
+            background: radial-gradient(ellipse at 30% 30%, var(--sakura-light), var(--sakura));
+            border-radius: 50% 0 50% 50%;
+            opacity: 0;
+            animation: sakura-fall linear infinite;
+            filter: drop-shadow(0 1px 2px rgba(255, 183, 197, 0.3));
+        }
+        @keyframes sakura-fall {
+            0% { opacity: 0; transform: translateY(-20px) rotate(0deg) scale(0.5); }
+            10% { opacity: 0.85; }
+            90% { opacity: 0.85; }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg) scale(0.8) translateX(100px); }
+        }
+
+        /* ========== 光玉效果 ========== */
+        .light-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(232, 168, 124, 0.3));
+            animation: orb-float 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes orb-float {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+            50% { transform: translateY(-20px) scale(1.1); opacity: 0.9; }
+        }
+
+        /* ========== 音乐播放器 ========== */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 10px 18px;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
+        }
+        .music-player:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+        .music-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--gradient-warm);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+        .music-btn:hover { transform: scale(1.1); }
+        .music-btn svg { width: 20px; height: 20px; fill: currentColor; }
+        .music-info { display: flex; flex-direction: column; gap: 2px; }
+        .music-title { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+        .music-artist { font-size: 0.75rem; color: var(--text-muted); }
+        .music-visualizer { display: flex; align-items: flex-end; gap: 2px; height: 20px; }
+        .music-bar {
+            width: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+            animation: music-dance 0.5s ease-in-out infinite alternate;
+        }
+        .music-bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+        .music-bar:nth-child(2) { height: 14px; animation-delay: 0.1s; }
+        .music-bar:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+        .music-bar:nth-child(4) { height: 16px; animation-delay: 0.3s; }
+        .music-bar:nth-child(5) { height: 6px; animation-delay: 0.4s; }
+        @keyframes music-dance { from { transform: scaleY(0.5); } to { transform: scaleY(1); } }
+        .music-player.paused .music-bar { animation: none; height: 6px; }
+
+        /* ========== Live2D看板娘容器 ========== */
+        .live2d-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 999;
+            pointer-events: none;
+        }
+        .live2d-wrapper {
+            position: relative;
+            pointer-events: auto;
+        }
+        #live2dCanvas {
+            display: block;
+            cursor: pointer;
+        }
+        
+        /* 对话气泡 */
+        .live2d-bubble {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            border: 2px solid var(--nagisa);
+            border-radius: var(--radius-lg);
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+            box-shadow: var(--shadow-soft);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            max-width: 250px;
+            white-space: normal;
+            text-align: center;
+        }
+        .live2d-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: var(--nagisa);
+        }
+        .live2d-bubble.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+        
+        /* 工具栏 */
+        .live2d-toolbar {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .live2d-container:hover .live2d-toolbar,
+        .live2d-toolbar.active {
+            opacity: 1;
+        }
+        .live2d-tool-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        .live2d-tool-btn:hover {
+            background: var(--nagisa);
+            color: white;
+            transform: scale(1.1);
+        }
+        .live2d-tool-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+        
+        /* 换装菜单 */
+        .live2d-dress-menu {
+            position: absolute;
+            bottom: calc(100% + 80px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 15px;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: var(--shadow-glow);
+            min-width: 150px;
+        }
+        .live2d-dress-menu.show {
+            display: flex;
+        }
+        .dress-option {
+            padding: 8px 16px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            text-align: left;
+        }
+        .dress-option:hover,
+        .dress-option.active {
+            background: var(--nagisa);
+            color: white;
+            border-color: var(--nagisa);
+        }
+
+        /* ========== 导航栏 ========== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1002;
+            padding: 1.25rem 3rem;
+            transition: var(--transition);
+        }
+        .navbar.scrolled {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0.875rem 3rem;
+            box-shadow: var(--shadow-soft);
+        }
+        .nav-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        .nav-logo-icon {
+            width: 36px; height: 36px;
+            background: var(--gradient-warm);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(232, 168, 124, 0.3);
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+        .nav-link:hover {
+            color: var(--primary-dark);
+            background: rgba(232, 168, 124, 0.1);
+        }
+
+        .theme-toggle {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            color: var(--primary);
+        }
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+        .theme-toggle svg { width: 20px; height: 20px; fill: currentColor; }
+        .theme-toggle .sun { display: none; }
+        [data-theme="dark"] .theme-toggle .moon { display: none; }
+        [data-theme="dark"] .theme-toggle .sun { display: block; }
+
+        .menu-toggle {
+            display: none;
+            width: 44px; height: 44px;
+            border-radius: var(--radius-md);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+        }
+        .menu-toggle span {
+            width: 20px; height: 2px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-primary);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        .mobile-menu.active { opacity: 1; visibility: visible; }
+        .mobile-menu-links { list-style: none; text-align: center; }
+        .mobile-menu-links li {
+            margin: 1.25rem 0;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .mobile-menu.active .mobile-menu-links li { transform: translateY(0); opacity: 1; }
+        .mobile-menu.active .mobile-menu-links li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active .mobile-menu-links li:nth-child(2) { transition-delay: 0.15s; }
+        .mobile-menu.active .mobile-menu-links li:nth-child(3) { transition-delay: 0.2s; }
+        .mobile-menu.active .mobile-menu-links li:nth-child(4) { transition-delay: 0.25s; }
+        .mobile-menu-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.75rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        /* ========== Hero区域 ========== */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-hero);
+        }
+        .hero-tree {
+            position: absolute;
+            bottom: 0;
+            font-size: 20rem;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+        .hero-tree.left { left: -5rem; transform: rotate(-5deg); }
+        .hero-tree.right { right: -5rem; transform: rotate(5deg) scaleX(-1); }
+
+        /* Hero图片装饰 - 修复移动端显示 */
+        .hero-image {
+            position: absolute;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            animation: fadeInFloat 1s ease-out forwards;
+            pointer-events: none;
+            transition: var(--transition);
+            z-index: 5;
+        }
+        .hero-image:hover {
+            opacity: 1 !important;
+            transform: scale(1.05);
+        }
+        .hero-image-1 {
+            top: 15%;
+            left: 5%;
+            width: 180px;
+            animation-delay: 0.8s;
+            border: 4px solid var(--sakura-light);
+        }
+        .hero-image-2 {
+            bottom: 20%;
+            right: 5%;
+            width: 200px;
+            animation-delay: 1s;
+            border: 4px solid var(--nagisa-light);
+        }
+        @keyframes fadeInFloat {
+            from { opacity: 0; transform: translateY(30px) scale(0.9); }
+            to { opacity: 0.9; transform: translateY(0) scale(1); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            animation: fadeInDown 0.8s ease-out;
+        }
+        .hero-badge-icon { font-size: 1.2rem; }
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+        .hero-title-main { color: var(--primary-dark); }
+        .hero-title-sub {
+            display: block;
+            font-size: 0.5em;
+            font-weight: 500;
+            color: var(--nagisa-dark);
+            margin-top: 0.5rem;
+        }
+        .hero-quote {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            font-style: italic;
+            line-height: 1.9;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+        .hero-quote-author {
+            display: block;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-style: normal;
+        }
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: var(--gradient-warm);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            box-shadow: 0 8px 30px rgba(232, 168, 124, 0.4);
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(232, 168, 124, 0.5);
+        }
+        .hero-cta svg { width: 18px; height: 18px; fill: currentColor; transition: var(--transition); }
+        .hero-cta:hover svg { transform: translateX(4px); }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            animation: bounce 2s infinite;
+            z-index: 10;
+        }
+        .scroll-hint svg { width: 24px; height: 24px; fill: var(--primary); }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-8px); }
+            60% { transform: translateX(-50%) translateY(-4px); }
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ========== 通用Section ========== */
+        .section {
+            padding: 7rem 3rem;
+            position: relative;
+        }
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+        .section-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+        .section-subtitle { color: var(--text-secondary); font-size: 1rem; }
+
+        /* ========== 关于我 ========== */
+        .about-section { background: var(--bg-secondary); }
+        .profile-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 3rem;
+            align-items: center;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+        }
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: var(--gradient-warm);
+        }
+        .avatar-wrapper { position: relative; }
+        .avatar-glow {
+            position: absolute;
+            inset: -15px;
+            background: var(--nagisa);
+            border-radius: 50%;
+            opacity: 0.3;
+            filter: blur(25px);
+            animation: avatar-pulse 3s ease-in-out infinite;
+        }
+        @keyframes avatar-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+        }
+        .avatar {
+            position: relative;
+            width: 180px; height: 180px;
+            border-radius: 50%;
+            background: var(--gradient-sky);
+            padding: 5px;
+            box-shadow: 0 10px 40px rgba(168, 216, 185, 0.4);
+        }
+        .avatar-inner {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+        .profile-info { position: relative; }
+        .profile-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .profile-role {
+            color: var(--nagisa-dark);
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .profile-bio {
+            color: var(--text-secondary);
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+        }
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .tag {
+            padding: 0.5rem 1.125rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            cursor: default;
+        }
+        .tag:hover {
+            background: var(--nagisa);
+            border-color: var(--nagisa);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Q版图片区域 */
+        .profile-qimage {
+            width: 200px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 10px 40px rgba(255, 183, 197, 0.3);
+            border: 3px solid var(--sakura-light);
+            transition: var(--transition);
+        }
+        .profile-qimage:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        /* ========== 番剧推荐 ========== */
+        .anime-section { background: var(--bg-primary); }
+
+        /* 角色拼贴图区域 */
+        .characters-banner {
+            margin-bottom: 3rem;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+        .characters-banner img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .characters-banner-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: white;
+            text-align: center;
+        }
+        .characters-banner-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .characters-banner-desc { font-size: 0.9rem; opacity: 0.9; }
+
+        .anime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .anime-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .anime-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(232, 168, 124, 0.15);
+        }
+        .anime-poster {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+        .anime-poster-bg {
+            width: 100%; height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            transition: var(--transition);
+        }
+        .anime-card:hover .anime-poster-bg { transform: scale(1.05); }
+        .anime-badge {
+            position: absolute;
+            top: 1rem; left: 1rem;
+            padding: 0.375rem 0.875rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        .anime-rating {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            padding: 0.375rem 0.75rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        .anime-info { padding: 1.5rem; }
+        .anime-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .anime-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-bottom: 0.75rem;
+        }
+        .anime-desc {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* ========== 经典场景 ========== */
+        .scenes-section { background: var(--bg-secondary); }
+        .scenes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .scene-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .scene-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+        .scene-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+        .scene-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+        .scene-desc { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+        /* ========== 语录板块 ========== */
+        .quote-section {
+            background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        .quote-decor {
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        .quote-decor.left { top: 2rem; left: 2rem; }
+        .quote-decor.right { bottom: 2rem; right: 2rem; }
+
+        .quote-card {
+            max-width: 750px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+        }
+        .quote-card::before {
+            content: '"';
+            position: absolute;
+            top: 0.5rem; left: 1.5rem;
+            font-size: 6rem;
+            font-family: Georgia, serif;
+            color: var(--primary);
+            opacity: 0.2;
+            line-height: 1;
+        }
+        .quote-text {
+            font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+            font-style: italic;
+            line-height: 2;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        .quote-author { color: var(--primary-dark); font-weight: 600; font-size: 1rem; }
+        .quote-source { color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem; }
+        .quote-btn {
+            margin-top: 2rem;
+            padding: 0.875rem 2rem;
+            background: var(--gradient-warm);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .quote-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(232, 168, 124, 0.4);
+        }
+
+        /* ========== 页脚 ========== */
+        .footer {
+            padding: 4rem 3rem 2rem;
+            background: var(--bg-tertiary);
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+        }
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .footer-message {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .social-link {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .social-link:hover {
+            background: var(--gradient-warm);
+            border-color: transparent;
+            color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(232, 168, 124, 0.3);
+        }
+        .social-link svg { width: 22px; height: 22px; fill: currentColor; }
+        .footer-text { color: var(--text-muted); font-size: 0.85rem; }
+        .footer-heart {
+            color: var(--sakura);
+            animation: heartbeat 1.5s ease-in-out infinite;
+            display: inline-block;
+        }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ========== 响应式 - 修复移动端显示 ========== */
+        @media (max-width: 1200px) {
+            .profile-card { grid-template-columns: auto 1fr; }
+            .profile-qimage { display: none; }
+        }
+        @media (max-width: 1024px) {
+            .profile-card { grid-template-columns: 1fr; text-align: center; padding: 2rem; }
+            .avatar-wrapper { margin: 0 auto; }
+            .tag-cloud { justify-content: center; }
+        }
+        @media (max-width: 768px) {
+            /* 导航栏 */
+            .navbar { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+            
+            /* Section */
+            .section { padding: 5rem 1.5rem; }
+            .profile-card { padding: 1.5rem; }
+            .avatar { width: 150px; height: 150px; }
+            .anime-grid { grid-template-columns: 1fr; }
+            .hero-tree { font-size: 12rem; }
+            .quote-card { padding: 2rem 1.5rem; }
+            
+            /* 移动端图片 - 缩小但仍然显示 */
+            .hero-image { 
+                width: 120px !important; 
+                opacity: 0.7 !important;
+                animation: fadeInFloat 1s ease-out forwards;
+            }
+            .hero-image-1 { top: 12%; left: 3%; }
+            .hero-image-2 { bottom: 25%; right: 3%; width: 140px !important; }
+            
+            /* 音乐播放器 */
+            .music-player {
+                bottom: 10px;
+                right: 10px;
+                padding: 8px 12px;
+            }
+            .music-info { display: none; }
+            
+            /* Live2D看板娘 - 移动端调整 */
+            .live2d-container { 
+                bottom: 0;
+                left: 0;
+            }
+            #live2dCanvas {
+                width: 180px !important;
+                height: 280px !important;
+            }
+            .live2d-bubble {
+                font-size: 0.8rem;
+                padding: 8px 14px;
+                max-width: 180px;
+            }
+            .live2d-toolbar {
+                bottom: 5px;
+            }
+            .live2d-tool-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 0.85rem;
+            }
+            .live2d-dress-menu {
+                bottom: calc(100% + 60px);
+            }
+        }
+        @media (max-width: 480px) {
+            .hero-cta { padding: 0.875rem 2rem; font-size: 0.9rem; }
+            .anime-poster { height: 250px; }
+            .hero-image { display: none; }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .anime-card:active { transform: scale(0.98); }
+            .tag:active { background: var(--nagisa); color: white; }
+            .hero-cta:active { transform: scale(0.95); }
+            .social-link:active { transform: scale(0.9); background: var(--gradient-warm); color: white; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 樱花飘落效果 -->
+    <div class="sakura-container" id="sakuraContainer"></div>
+
+    <!-- 背景音乐 -->
+    <audio id="bgMusic" loop preload="auto">
+        <!-- 请替换为你本地的音乐文件路径 -->
+        <source src="music/family.flac" type="audio/flac">
+        <source src="music/hualedao.flac" type="audio/flac">
+    </audio>
+
+    <!-- 音乐播放器 -->
+    <div class="music-player paused" id="musicPlayer">
+        <button class="music-btn" id="musicBtn" aria-label="播放/暂停">
+            <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <svg class="pause-icon" style="display:none" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        </button>
+        <div class="music-info">
+            <span class="music-title">团子大家族</span>
+            <span class="music-artist">Clannad OST</span>
+        </div>
+        <div class="music-visualizer">
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+        </div>
+    </div>
+
+    <!-- Live2D风格看板娘 -->
+    <!-- <div class="live2d-container" id="live2dContainer">
+        <div class="live2d-wrapper">
+            <canvas id="live2dCanvas" width="220" height="350"></canvas>
+            <div class="live2d-bubble" id="live2dBubble">你好呀~ 我是古河渚！</div>
+            <div class="live2d-toolbar" id="live2dToolbar">
+                <button class="live2d-tool-btn" id="btnHello" title="打招呼">👋</button>
+                <button class="live2d-tool-btn" id="btnDress" title="换装">👗</button>
+                <button class="live2d-tool-btn" id="btnTalk" title="对话">💬</button>
+                <button class="live2d-tool-btn" id="btnHide" title="隐藏">✖</button>
+            </div>
+            <div class="live2d-dress-menu" id="dressMenu">
+                <button class="dress-option active" data-dress="uniform">🏫 校服</button>
+                <button class="dress-option" data-dress="casual">👕 便服</button>
+                <button class="dress-option" data-dress="summer">🌸 夏装</button>
+                <button class="dress-option" data-dress="winter">❄️ 冬装</button>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- 导航栏 -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="nav-logo-icon">🌸</span>
+                <span>Clannad</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link">首页</a></li>
+                <li><a href="#about" class="nav-link">关于我</a></li>
+                <li><a href="#anime" class="nav-link">治愈番剧</a></li>
+                <li><a href="#scenes" class="nav-link">经典场景</a></li>
+                <li><a href="#quote" class="nav-link">经典语录</a></li>
+            </ul>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="打开菜单">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 移动端菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-menu-links">
+            <li><a href="#home">首页</a></li>
+            <li><a href="#about">关于我</a></li>
+            <li><a href="#anime">治愈番剧</a></li>
+            <li><a href="#scenes">经典场景</a></li>
+            <li><a href="#quote">经典语录</a></li>
+        </ul>
+    </div>
+
+    <!-- Hero区域 -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-tree left">🌸</div>
+        <div class="hero-tree right">🌸</div>
+        
+        <!-- 光玉装饰 -->
+        <div class="light-orb" style="width: 80px; height: 80px; top: 15%; left: 10%;"></div>
+        <div class="light-orb" style="width: 50px; height: 50px; top: 25%; right: 15%; animation-delay: 1s;"></div>
+        <div class="light-orb" style="width: 60px; height: 60px; bottom: 30%; left: 20%; animation-delay: 2s;"></div>
+        
+        <!-- 渚的插画装饰 -->
+        <img src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2FImage_1774796334017.jpg&nonce=f76ad0d1-d14a-45d8-9177-e430b1931b5b&project_id=7624730825610772521&sign=9c5fcff8f8683bdd6f1dc750bca7431cb48b7f78ffd6e490ebe78092e25427fa" 
+             alt="古河渚" class="hero-image hero-image-1">
+        <img src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2Fmmexport1775283913489.jpg&nonce=ee75e3a5-0f40-41f6-8437-f5eee55be3cb&project_id=7624730825610772521&sign=fa61396ad86c9df80a636822bb5063ffa8a65130e884178bde4ca0e991a520c1" 
+             alt="Clannad Q版" class="hero-image hero-image-2">
+        
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="hero-badge-icon">🌳</span>
+                <span>家族 ～ 温暖的记忆</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="hero-title-main">Clannad</span>
+                <span class="hero-title-sub">~ 家族 ~ 小镇的时间</span>
+            </h1>
+            <p class="hero-quote">
+                "这个世界是美丽的，即使它充满了悲伤和泪水。<br>
+                也请睁开你的双眼，去做你想做的事，成为你想成为的人。"
+                <span class="hero-quote-author">— 冈崎朋也</span>
+            </p>
+            <a href="#about" class="hero-cta">
+                开始旅程
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+        <div class="scroll-hint">
+            <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            <span>向下滚动</span>
+        </div>
+    </section>
+
+    <!-- 关于我 -->
+    <section class="section about-section" id="about">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-icon">🍥</div>
+                <h2 class="section-title">关于我</h2>
+                <p class="section-subtitle">一个被Clannad治愈的旅人</p>
+            </div>
+            <div class="profile-card fade-in">
+                <div class="avatar-wrapper">
+                    <div class="avatar-glow"></div>
+                    <div class="avatar">
+                        <div class="avatar-inner">🎀</div>
+                    </div>
+                </div>
+                <div class="profile-info">
+                    <h3 class="profile-name">古河渚的粉丝</h3>
+                    <p class="profile-role">
+                        <span>🌟</span>
+                        Clannad十年资深粉丝 · 治愈系动漫爱好者
+                    </p>
+                    <p class="profile-bio">
+                        从第一次看到渚站在坡道上的那一刻起，我就被这个温暖的世界深深吸引。
+                        Clannad教会了我什么是家族，什么是爱，什么是生命中真正重要的东西。
+                        这里收藏着我的感动，也希望能与你分享这份温暖。
+                    </p>
+                    <div class="tag-cloud">
+                        <span class="tag">Clannad</span>
+                        <span class="tag">AIR</span>
+                        <span class="tag">Kanon</span>
+                        <span class="tag">Key社作品</span>
+                        <span class="tag">治愈系</span>
+                        <span class="tag">日常温馨</span>
+                        <span class="tag">催泪神作</span>
+                    </div>
+                </div>
+                <img src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2Fmmexport1775283913489.jpg&nonce=ee75e3a5-0f40-41f6-8437-f5eee55be3cb&project_id=7624730825610772521&sign=fa61396ad86c9df80a636822bb5063ffa8a65130e884178bde4ca0e991a520c1" 
+                     alt="团子大家族" class="profile-qimage">
+            </div>
+        </div>
+    </section>
+
+    <!-- 治愈番剧推荐 -->
+    <section class="section anime-section" id="anime">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-icon">📺</div>
+                <h2 class="section-title">治愈番剧推荐</h2>
+                <p class="section-subtitle">那些温暖人心的故事</p>
+            </div>
+            
+            <!-- 角色拼贴图 -->
+            <div class="characters-banner fade-in">
+                <img src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2Fmmexport1775283911171.jpg&nonce=b2b264d6-33c1-4780-b1a0-b313d4830e14&project_id=7624730825610772521&sign=d01f6d2cbd2a2446b827d9067c98f1b408fd456e903a85c9c99bd8dc26da171e" 
+                     alt="Clannad角色合集">
+                <div class="characters-banner-overlay">
+                    <h3 class="characters-banner-title">Clannad 角色大家族</h3>
+                    <p class="characters-banner-desc">每一个角色都是一段温暖的记忆</p>
+                </div>
+            </div>
+            
+            <div class="anime-grid">
+                <div class="anime-card fade-in">
+                    <div class="anime-poster">
+                        <div class="anime-poster-bg" style="background: linear-gradient(135deg, #a8d8b9 0%, #87ceeb 100%);">🌸</div>
+                        <span class="anime-badge">治愈神作</span>
+                        <div class="anime-rating">⭐ 9.8</div>
+                    </div>
+                    <div class="anime-info">
+                        <h3 class="anime-title">Clannad ~ 家族 ~</h3>
+                        <div class="anime-meta"><span>2007-2008</span><span>47集</span><span>Kyoto Animation</span></div>
+                        <p class="anime-desc">一个关于家族、爱与成长的温暖故事。渚、朋也，以及小镇上每一个人的羁绊。</p>
+                    </div>
+                </div>
+                <div class="anime-card fade-in">
+                    <div class="anime-poster">
+                        <div class="anime-poster-bg" style="background: linear-gradient(135deg, #87ceeb 0%, #b0e0e6 100%);">🕊️</div>
+                        <span class="anime-badge">Key社三部曲</span>
+                        <div class="anime-rating">⭐ 9.2</div>
+                    </div>
+                    <div class="anime-info">
+                        <h3 class="anime-title">AIR</h3>
+                        <div class="anime-meta"><span>2005</span><span>13集</span><span>Kyoto Animation</span></div>
+                        <p class="anime-desc">天空中的少女，千年的羁绊。关于飞翔与自由的悲伤童话。</p>
+                    </div>
+                </div>
+                <div class="anime-card fade-in">
+                    <div class="anime-poster">
+                        <div class="anime-poster-bg" style="background: linear-gradient(135deg, #e8a87c 0%, #ffb7c5 100%);">❄️</div>
+                        <span class="anime-badge">Key社三部曲</span>
+                        <div class="anime-rating">⭐ 9.1</div>
+                    </div>
+                    <div class="anime-info">
+                        <h3 class="anime-title">Kanon</h3>
+                        <div class="anime-meta"><span>2006-2007</span><span>24集</span><span>Kyoto Animation</span></div>
+                        <p class="anime-desc">雪之少女的记忆，七年的约定。回到那座被雪覆盖的小镇。</p>
+                    </div>
+                </div>
+                <div class="anime-card fade-in">
+                    <div class="anime-poster">
+                        <div class="anime-poster-bg" style="background: linear-gradient(135deg, #ffb7c5 0%, #ffd1dc 100%);">🎀</div>
+                        <span class="anime-badge">催泪佳作</span>
+                        <div class="anime-rating">⭐ 9.4</div>
+                    </div>
+                    <div class="anime-info">
+                        <h3 class="anime-title">Angel Beats!</h3>
+                        <div class="anime-meta"><span>2010</span><span>13集</span><span>P.A. Works</span></div>
+                        <p class="anime-desc">死后的世界，未完成的愿望。一场关于青春与告别的狂欢。</p>
+                    </div>
+                </div>
+                <div class="anime-card fade-in">
+                    <div class="anime-poster">
+                        <div class="anime-poster-bg" style="background: linear-gradient(135deg, #f5c99d 0%, #e8a87c 100%);">🌅</div>
+                        <span class="anime-badge">治愈佳作</span>
+                        <div class="anime-rating">⭐ 9.3</div>
+                    </div>
+                    <div class="anime-info">
+                        <h3 class="anime-title">夏目友人帐</h3>
+                        <div class="anime-meta"><span>2008-</span><span>6季</span><span>Brain's Base</span></div>
+                        <p class="anime-desc">温柔的少年与妖怪们的邂逅。每一个故事都是一首温柔的诗。</p>
+                    </div>
+                </div>
+                <div class="anime-card fade-in">
+                    <div class="anime-poster">
+                        <div class="anime-poster-bg" style="background: linear-gradient(135deg, #c5e8d0 0%, #a8d8b9 100%);">🌼</div>
+                        <span class="anime-badge">温馨日常</span>
+                        <div class="anime-rating">⭐ 9.0</div>
+                    </div>
+                    <div class="anime-info">
+                        <h3 class="anime-title">未闻花名</h3>
+                        <div class="anime-meta"><span>2011</span><span>11集</span><span>A-1 Pictures</span></div>
+                        <p class="anime-desc">那朵花的名字，是我们永远的约定。青春、友情与告别的故事。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 经典场景 -->
+    <section class="section scenes-section" id="scenes">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-icon">✨</div>
+                <h2 class="section-title">经典场景</h2>
+                <p class="section-subtitle">那些永远不会忘记的画面</p>
+            </div>
+            <div class="scenes-grid">
+                <div class="scene-card fade-in">
+                    <div class="scene-icon">🌸</div>
+                    <h3 class="scene-title">樱花坡道</h3>
+                    <p class="scene-desc">"你喜欢这所学校吗？我非常喜欢。这里的一切，对我来说都很珍贵。"</p>
+                </div>
+                <div class="scene-card fade-in">
+                    <div class="scene-icon">🏮</div>
+                    <h3 class="scene-title">古河面包店</h3>
+                    <p class="scene-desc">温暖的灯光，美味的面包，以及那个永远微笑着等待的家人。</p>
+                </div>
+                <div class="scene-card fade-in">
+                    <div class="scene-icon">🎭</div>
+                    <h3 class="scene-title">演剧部的梦想</h3>
+                    <p class="scene-desc">渚站在舞台上，那是她第一次展现出真正的自己。</p>
+                </div>
+                <div class="scene-card fade-in">
+                    <div class="scene-icon">👨‍👩‍👧</div>
+                    <h3 class="scene-title">家族的羁绊</h3>
+                    <p class="scene-desc">"欢迎回家。"这句简单的话，包含着最深的温暖。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 语录板块 -->
+    <section class="section quote-section" id="quote">
+        <div class="quote-decor left">🌸</div>
+        <div class="quote-decor right">🎀</div>
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-icon">💬</div>
+                <h2 class="section-title">经典语录</h2>
+                <p class="section-subtitle">那些触动心灵的话语</p>
+            </div>
+            <div class="quote-card fade-in" id="quoteCard">
+                <p class="quote-text" id="quoteText">
+                    "大家...再见了。虽然有点寂寞...但是，我已经不会哭了。<br>
+                    因为我最喜欢的人，现在就在我身边。"
+                </p>
+                <p class="quote-author" id="quoteAuthor">古河渚</p>
+                <p class="quote-source" id="quoteSource">《Clannad ~AFTER STORY~》</p>
+                <button class="quote-btn" onclick="changeQuote()">换一句</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-logo">
+            <span>🌸</span>
+            <span>Clannad Fan Site</span>
+        </div>
+        <p class="footer-message">
+            "无论何时，无论何地，只要有人记得，家族的爱就永远不会消失。"<br>
+            愿每一个被Clannad感动过的人，都能找到属于自己的温暖。
+        </p>
+        <div class="social-links">
+            <a href="#" class="social-link" title="GitHub">
+                <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+            <a href="#" class="social-link" title="Twitter">
+                <svg viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+            </a>
+            <a href="#" class="social-link" title="Bilibili">
+                <svg viewBox="0 0 24 24"><path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 01-.373-.906c0-.356.124-.659.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 01.16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/></svg>
+            </a>
+        </div>
+        <p class="footer-text">用 <span class="footer-heart">♥</span> 制作 · Clannad Fan Site © 2024</p>
+    </footer>
+
+    <script>
+        // ========== 樱花飘落效果 ==========
+        function createSakura() {
+            const container = document.getElementById('sakuraContainer');
+            for (let i = 0; i < 25; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'sakura-petal';
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animationDelay = Math.random() * 10 + 's';
+                petal.style.animationDuration = (Math.random() * 5 + 8) + 's';
+                petal.style.width = (Math.random() * 8 + 8) + 'px';
+                petal.style.height = petal.style.width;
+                container.appendChild(petal);
+            }
+        }
+        createSakura();
+
+        // ========== 背景音乐播放器 ==========
+        const bgMusic = document.getElementById('bgMusic');
+        const musicPlayer = document.getElementById('musicPlayer');
+        const musicBtn = document.getElementById('musicBtn');
+        const playIcon = musicBtn.querySelector('.play-icon');
+        const pauseIcon = musicBtn.querySelector('.pause-icon');
+        let isPlaying = false;
+
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicPlayer.classList.add('paused');
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            } else {
+                bgMusic.play().catch(() => {});
+                musicPlayer.classList.remove('paused');
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // ========== Live2D风格古河渚看板娘 ==========
+        // const canvas = document.getElementById('live2dCanvas');
+        // const ctx = canvas.getContext('2d');
+        // const bubble = document.getElementById('live2dBubble');
+        // const container = document.getElementById('live2dContainer');
+        // const toolbar = document.getElementById('live2dToolbar');
+        // const dressMenu = document.getElementById('dressMenu');
+
+        // 动画状态
+        const state = {
+            frame: 0,
+            breathPhase: 0,
+            blinkTimer: 0,
+            isBlinking: false,
+            hairPhase: 0,
+            isWaving: false,
+            waveAngle: 0,
+            expression: 'happy', // happy, surprised, shy
+            currentDress: 'uniform',
+            mouseX: 0,
+            mouseY: 0,
+            isFollowingMouse: false,
+            jumpOffset: 0
+        };
+
+        // 服装配置
+        const dresses = {
+            uniform: {
+                bodyColor: '#F5DEB3',
+                collarColor: '#9370DB',
+                skirtColor: '#4A4A4A',
+                ribbonColor: '#FF6B6B'
+            },
+            casual: {
+                bodyColor: '#FFB6C1',
+                collarColor: '#FFFFFF',
+                skirtColor: '#87CEEB',
+                ribbonColor: '#FFB6C1'
+            },
+            summer: {
+                bodyColor: '#FFFFFF',
+                collarColor: '#98D8C8',
+                skirtColor: '#F7DC6F',
+                ribbonColor: '#F1948A'
+            },
+            winter: {
+                bodyColor: '#E8E8E8',
+                collarColor: '#5DADE2',
+                skirtColor: '#2C3E50',
+                ribbonColor: '#E74C3C'
+            }
+        };
+
+        // 对话内容
+        const dialogues = [
+            "你好呀~ 我是古河渚！",
+            "団子大家族~ 団子団子~♪",
+            "你想吃豆沙包吗？あんぱん大好き！",
+            "欢迎来到Clannad的世界！",
+            "今天也要加油哦！",
+            "我会一直支持你的！",
+            "不管发生什么，都不要放弃！",
+            "最喜欢大家了！",
+            "期待明天的到来！",
+            "家人是最重要的！"
+        ];
+
+        // 绘制函数
+        function drawNagisa() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const cx = canvas.width / 2;
+            const cy = 200;
+            
+            // 呼吸动画
+            state.breathPhase += 0.03;
+            const breathOffset = Math.sin(state.breathPhase) * 2;
+            
+            // 头发飘动
+            state.hairPhase += 0.02;
+            const hairWave = Math.sin(state.hairPhase) * 3;
+            
+            // 招手动画
+            if (state.isWaving) {
+                state.waveAngle += 0.15;
+                if (state.waveAngle > Math.PI * 4) {
+                    state.isWaving = false;
+                    state.waveAngle = 0;
+                }
+            }
+            
+            ctx.save();
+            ctx.translate(cx, cy + breathOffset + state.jumpOffset);
+            
+            const dress = dresses[state.currentDress];
+            
+            // ===== 后层头发 =====
+            ctx.fillStyle = '#8B4513';
+            drawBackHair(0, -40, hairWave);
+            
+            // ===== 身体 =====
+            drawBody(0, 60, dress);
+            
+            // ===== 脸 =====
+            ctx.fillStyle = '#FFE4C4';
+            ctx.beginPath();
+            ctx.ellipse(0, -20, 45, 42, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // ===== 前层头发 =====
+            ctx.fillStyle = '#8B4513';
+            drawFrontHair(0, -55, hairWave);
+            
+            // ===== 呆毛 =====
+            drawAhoge(0, -80, hairWave);
+            
+            // ===== 腮红 =====
+            ctx.fillStyle = 'rgba(255, 182, 193, 0.5)';
+            ctx.beginPath();
+            ctx.ellipse(-28, -8, 10, 6, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(28, -8, 10, 6, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // ===== 眼睛 =====
+            if (!state.isBlinking) {
+                drawEyes(0, -22);
+            } else {
+                drawClosedEyes(0, -22);
+            }
+            
+            // ===== 嘴巴 =====
+            drawMouth(0, 0);
+            
+            // ===== 手臂 =====
+            drawArms(0, 50, dress);
+            
+            ctx.restore();
+            
+            // 眨眼逻辑
+            state.blinkTimer++;
+            if (state.blinkTimer > 180) {
+                state.isBlinking = true;
+                if (state.blinkTimer > 190) {
+                    state.isBlinking = false;
+                    state.blinkTimer = 0;
+                }
+            }
+            
+            state.frame++;
+            requestAnimationFrame(drawNagisa);
+        }
+
+        // 绘制后层头发
+        function drawBackHair(x, y, wave) {
+            ctx.beginPath();
+            ctx.moveTo(x - 50, y + 80);
+            ctx.quadraticCurveTo(x - 55 + wave, y + 20, x - 45, y);
+            ctx.quadraticCurveTo(x - 40, y - 30, x, y - 50);
+            ctx.quadraticCurveTo(x + 40, y - 30, x + 45, y);
+            ctx.quadraticCurveTo(x + 55 - wave, y + 20, x + 50, y + 80);
+            ctx.quadraticCurveTo(x + 30, y + 100, x, y + 90);
+            ctx.quadraticCurveTo(x - 30, y + 100, x - 50, y + 80);
+            ctx.fill();
+        }
+
+        // 绘制前层头发
+        function drawFrontHair(x, y, wave) {
+            ctx.beginPath();
+            ctx.moveTo(x - 42, y + 35);
+            ctx.quadraticCurveTo(x - 50 + wave * 0.5, y + 10, x - 35, y);
+            ctx.quadraticCurveTo(x - 20, y - 15, x, y - 20);
+            ctx.quadraticCurveTo(x + 20, y - 15, x + 35, y);
+            ctx.quadraticCurveTo(x + 50 - wave * 0.5, y + 10, x + 42, y + 35);
+            ctx.quadraticCurveTo(x + 25, y + 25, x, y + 30);
+            ctx.quadraticCurveTo(x - 25, y + 25, x - 42, y + 35);
+            ctx.fill();
+            
+            // 刘海缝隙
+            ctx.fillStyle = '#FFE4C4';
+            ctx.beginPath();
+            ctx.moveTo(x - 15, y + 20);
+            ctx.quadraticCurveTo(x, y + 35, x + 15, y + 20);
+            ctx.quadraticCurveTo(x, y + 25, x - 15, y + 20);
+            ctx.fill();
+        }
+
+        // 绘制呆毛
+        function drawAhoge(x, y, wave) {
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.quadraticCurveTo(x + 15 + wave, y - 30, x + 5 + wave * 2, y - 25);
+            ctx.stroke();
+        }
+
+        // 绘制眼睛
+        function drawEyes(x, y) {
+            // 左眼
+            ctx.fillStyle = '#8B4513';
+            ctx.beginPath();
+            ctx.ellipse(x - 18, y, 10, 14, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // 高光
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.ellipse(x - 21, y - 5, 4, 5, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(x - 15, y + 3, 2, 2, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // 右眼
+            ctx.fillStyle = '#8B4513';
+            ctx.beginPath();
+            ctx.ellipse(x + 18, y, 10, 14, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.ellipse(x + 15, y - 5, 4, 5, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(x + 21, y + 3, 2, 2, 0, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // 绘制闭眼
+        function drawClosedEyes(x, y) {
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            
+            ctx.beginPath();
+            ctx.arc(x - 18, y, 8, 0, Math.PI);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.arc(x + 18, y, 8, 0, Math.PI);
+            ctx.stroke();
+        }
+
+        // 绘制嘴巴
+        function drawMouth(x, y) {
+            ctx.strokeStyle = '#D2691E';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            
+            if (state.expression === 'happy' || state.isWaving) {
+                // 开心的微笑
+                ctx.beginPath();
+                ctx.arc(x, y, 8, 0.1, Math.PI - 0.1);
+                ctx.stroke();
+            } else if (state.expression === 'surprised') {
+                // 惊讶的O型嘴
+                ctx.beginPath();
+                ctx.ellipse(x, y + 2, 5, 7, 0, 0, Math.PI * 2);
+                ctx.stroke();
+            } else {
+                // 害羞的w型嘴
+                ctx.beginPath();
+                ctx.moveTo(x - 6, y);
+                ctx.quadraticCurveTo(x - 3, y + 4, x, y);
+                ctx.quadraticCurveTo(x + 3, y + 4, x + 6, y);
+                ctx.stroke();
+            }
+        }
+
+        // 绘制身体
+        function drawBody(x, y, dress) {
+            // 上衣
+            ctx.fillStyle = dress.bodyColor;
+            ctx.beginPath();
+            ctx.moveTo(x - 35, y);
+            ctx.quadraticCurveTo(x - 40, y + 40, x - 30, y + 70);
+            ctx.lineTo(x + 30, y + 70);
+            ctx.quadraticCurveTo(x + 40, y + 40, x + 35, y);
+            ctx.closePath();
+            ctx.fill();
+            
+            // 领子
+            ctx.fillStyle = dress.collarColor;
+            ctx.beginPath();
+            ctx.moveTo(x - 20, y + 5);
+            ctx.lineTo(x, y + 35);
+            ctx.lineTo(x + 20, y + 5);
+            ctx.closePath();
+            ctx.fill();
+            
+            // 蝴蝶结
+            ctx.fillStyle = dress.ribbonColor;
+            ctx.beginPath();
+            ctx.ellipse(x - 10, y + 15, 8, 5, -0.3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(x + 10, y + 15, 8, 5, 0.3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x, y + 15, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // 裙子
+            ctx.fillStyle = dress.skirtColor;
+            ctx.beginPath();
+            ctx.moveTo(x - 30, y + 70);
+            ctx.lineTo(x - 40, y + 130);
+            ctx.lineTo(x + 40, y + 130);
+            ctx.lineTo(x + 30, y + 70);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // 绘制手臂
+        function drawArms(x, y, dress) {
+            ctx.fillStyle = '#FFE4C4';
+            ctx.strokeStyle = dress.bodyColor;
+            ctx.lineWidth = 12;
+            
+            // 左手
+            ctx.beginPath();
+            ctx.moveTo(x - 35, y + 10);
+            ctx.quadraticCurveTo(x - 50, y + 40, x - 45, y + 60);
+            ctx.stroke();
+            
+            // 右手（可能有招手动作）
+            const rightArmAngle = state.isWaving ? Math.sin(state.waveAngle) * 0.5 : 0;
+            ctx.save();
+            ctx.translate(x + 35, y + 10);
+            ctx.rotate(rightArmAngle);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.quadraticCurveTo(15, 30, 10, 50);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // 显示对话
+        function showDialogue(text) {
+            bubble.textContent = text;
+            bubble.classList.add('show');
+            setTimeout(() => {
+                bubble.classList.remove('show');
+            }, 4000);
+        }
+
+        // 打招呼
+        function doWave() {
+            state.isWaving = true;
+            state.waveAngle = 0;
+            const greetings = [
+                "你好呀~ 很高兴见到你！",
+                "欢迎欢迎~ ✨",
+                "嗨~ 今天过得怎么样？",
+                "呀~ 你来啦！"
+            ];
+            showDialogue(greetings[Math.floor(Math.random() * greetings.length)]);
+        }
+
+        // 换台词
+        function changeDialogue() {
+            showDialogue(dialogues[Math.floor(Math.random() * dialogues.length)]);
+        }
+
+        // 跳动效果
+        function doJump() {
+            state.jumpOffset = -20;
+            setTimeout(() => { state.jumpOffset = 0; }, 150);
+        }
+
+        // 开始绘制
+        // drawNagisa();
+
+        // ===== 交互事件 =====
+        
+        // 点击Canvas
+        /* canvas.addEventListener('click', (e) => {
+            doJump();
+            changeDialogue();
+        });
+
+        // 触摸Canvas
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            doJump();
+            changeDialogue();
+        }); 
+
+        // 工具栏按钮
+        document.getElementById('btnHello').addEventListener('click', (e) => {
+            e.stopPropagation();
+            doWave();
+        });
+
+        document.getElementById('btnDress').addEventListener('click', (e) => {
+            e.stopPropagation();
+            dressMenu.classList.toggle('show');
+        });
+
+        document.getElementById('btnTalk').addEventListener('click', (e) => {
+            e.stopPropagation();
+            changeDialogue();
+        });
+
+        document.getElementById('btnHide').addEventListener('click', (e) => {
+            e.stopPropagation();
+            container.style.transform = 'translateX(-100%)';
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, 300);
+        });
+
+        // 换装选项
+        document.querySelectorAll('.dress-option').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const dress = e.target.dataset.dress;
+                state.currentDress = dress;
+                
+                // 更新选中状态
+                document.querySelectorAll('.dress-option').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                // 显示换装成功
+                const dressNames = {
+                    uniform: '校服',
+                    casual: '便服',
+                    summer: '夏装',
+                    winter: '冬装'
+                };
+                showDialogue(`换上了${dressNames[dress]}~ 好看吗？`);
+                dressMenu.classList.remove('show');
+                doJump();
+            });
+        });
+
+        // 悬停显示工具栏
+        container.addEventListener('mouseenter', () => {
+            toolbar.classList.add('active');
+        });
+        container.addEventListener('mouseleave', () => {
+            if (!dressMenu.classList.contains('show')) {
+                toolbar.classList.remove('active');
+            }
+        });
+
+        // 点击其他地方关闭换装菜单
+        document.addEventListener('click', () => {
+            dressMenu.classList.remove('show');
+        });
+
+        // 初始打招呼
+        setTimeout(() => {
+            showDialogue("你好呀~ 我是古河渚！点击我聊天哦~");
+        }, 2000);
+*/
+        // ========== 主题切换 ==========
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const savedTheme = localStorage.getItem('clannad-theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('clannad-theme', next);
+        });
+
+        // ========== 导航栏滚动效果 ==========
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // ========== 移动端菜单 ==========
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-menu-links a');
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // ========== 滚动动画 ==========
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1, rootMargin: '-30px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // ========== 语录切换 ==========
+        const quotes = [
+            { text: '"大家...再见了。虽然有点寂寞...但是，我已经不会哭了。<br>因为我最喜欢的人，现在就在我身边。"', author: '古河渚', source: '《Clannad ~AFTER STORY~》' },
+            { text: '"这个世界是美丽的，即使它充满了悲伤和泪水。<br>也请睁开你的双眼，去做你想做的事，成为你想成为的人。"', author: '冈崎朋也', source: '《Clannad》' },
+            { text: '"无论发生什么，我都会一直守护着你。<br>这是我对你许下的承诺。"', author: '冈崎朋也', source: '《Clannad ~AFTER STORY~》' },
+            { text: '"团子大家族...手牵着手，围成一个大圆圈。<br>虽然会有悲伤的事，但是大家都在这里。"', author: '团子之歌', source: '《Clannad》ED' },
+            { text: '"我想要和你在一起，想要保护你。<br>这就是我的愿望。"', author: '古河渚', source: '《Clannad》' },
+            { text: '"明天会变成什么样子，我不知道。<br>但是，只要有你在，我就能继续走下去。"', author: '冈崎朋也', source: '《Clannad ~AFTER STORY~》' }
+        ];
+
+        let currentQuote = 0;
+
+        function changeQuote() {
+            currentQuote = (currentQuote + 1) % quotes.length;
+            const quote = quotes[currentQuote];
+            const card = document.getElementById('quoteCard');
+            
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                document.getElementById('quoteText').innerHTML = quote.text;
+                document.getElementById('quoteAuthor').textContent = quote.author;
+                document.getElementById('quoteSource').textContent = quote.source;
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 300);
+        }
+
+        // ========== 平滑滚动 ==========
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+</html>
