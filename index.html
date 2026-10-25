@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clash Party 导入订阅完整教程</title>
+<meta name="description" content="6 步图文教程：从选择配置模式到成功导入机场订阅，手把手带你用上 Clash Party。">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%235B8DFF'/%3E%3Cpath d='M10 22 L22 10 M22 10 h-7 M22 10 v7' stroke='%230E1116' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --bg:#0E1116;
+  --bg-soft:#141A23;
+  --card:#161D27;
+  --border:#242D3B;
+  --text:#E8ECF3;
+  --text-dim:#9AA5B4;
+  --accent:#5B8DFF;
+  --accent-strong:#7BA5FF;
+  --accent-soft:rgba(91,141,255,.12);
+  --radius:12px;
+  --maxw:880px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+button{font-family:inherit}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:rgba(91,141,255,.35)}
+/* ===== 顶部滚动进度条 ===== */
+#progressBar{
+  position:fixed;top:0;left:0;height:3px;width:0;
+  background:linear-gradient(90deg,var(--accent),var(--accent-strong));
+  z-index:100;
+}
+/* ===== Hero ===== */
+.hero{
+  position:relative;
+  padding:96px 24px 72px;
+  text-align:center;
+  background:
+    radial-gradient(600px 300px at 50% -40px, rgba(91,141,255,.16), transparent 70%),
+    var(--bg);
+  border-bottom:1px solid var(--border);
+}
+.hero .badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;border:1px solid var(--border);border-radius:999px;
+  background:var(--bg-soft);color:var(--text-dim);
+  font-size:13px;font-weight:500;letter-spacing:.02em;
+}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.hero h1{
+  margin:22px auto 16px;max-width:720px;
+  font-size:clamp(30px,5vw,46px);font-weight:900;letter-spacing:.01em;line-height:1.25;
+}
+.hero .sub{
+  margin:0 auto 30px;max-width:560px;
+  color:var(--text-dim);font-size:clamp(15px,2vw,17px);
+}
+.hero .meta{
+  display:flex;justify-content:center;gap:26px;flex-wrap:wrap;
+  margin-bottom:34px;color:var(--text-dim);font-size:14px;
+}
+.hero .meta span{display:inline-flex;align-items:center;gap:7px}
+.hero .meta svg{width:15px;height:15px;stroke:var(--accent);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.start-btn{
+  display:inline-block;padding:13px 34px;border-radius:999px;
+  background:var(--accent);color:#0E1116;font-weight:700;font-size:15px;
+  text-decoration:none;transition:transform .15s ease, background .15s ease;
+}
+.start-btn:hover{background:var(--accent-strong);transform:translateY(-1px)}
+/* ===== 步骤导航 ===== */
+.step-nav{
+  position:sticky;top:0;z-index:90;
+  display:flex;gap:8px;justify-content:center;align-items:center;
+  padding:12px 16px;overflow-x:auto;
+  background:rgba(14,17,22,.85);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.step-nav a{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:50%;
+  border:1px solid var(--border);color:var(--text-dim);
+  font-size:13px;font-weight:700;text-decoration:none;
+  transition:all .15s ease;
+}
+.step-nav a:hover{color:var(--text);border-color:var(--accent)}
+.step-nav a.active{background:var(--accent);border-color:var(--accent);color:#0E1116}
+/* ===== 步骤主体 ===== */
+main{max-width:var(--maxw);margin:0 auto;padding:56px 24px 24px}
+.step{
+  padding:44px 0;border-bottom:1px solid var(--border);
+  scroll-margin-top:70px;
+}
+.step:last-child{border-bottom:none}
+.step-head{
+  display:flex;gap:22px;align-items:flex-start;margin-bottom:22px;
+}
+.step-num{
+  flex:0 0 auto;width:56px;height:56px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--accent-soft);border:1px solid rgba(91,141,255,.35);
+  color:var(--accent-strong);font-size:20px;font-weight:900;
+}
+.step h2{
+  font-size:clamp(21px,3vw,26px);font-weight:700;line-height:1.35;margin:2px 0 8px;
+}
+.step .desc{color:var(--text-dim);font-size:15px;max-width:640px}
+.step .desc b{color:var(--text);font-weight:700}
+.shot{
+  position:relative;margin:0 auto;max-width:860px;
+  border:1px solid var(--border);border-radius:var(--radius);
+  background:var(--card);overflow:hidden;
+  cursor:zoom-in;transition:border-color .15s ease;
+}
+.shot:hover{border-color:rgba(91,141,255,.55)}
+.shot img{display:block;width:100%;height:auto}
+.shot .zoom-hint{
+  position:absolute;right:12px;top:12px;pointer-events:none;
+  padding:4px 10px;border-radius:999px;
+  background:rgba(14,17,22,.72);color:var(--text-dim);
+  font-size:12px;display:inline-flex;align-items:center;gap:6px;
+  opacity:0;transition:opacity .2s ease;
+}
+.shot:hover .zoom-hint{opacity:1}
+.shot .zoom-hint svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+/* ===== Footer ===== */
+footer{
+  border-top:1px solid var(--border);
+  padding:40px 24px 56px;text-align:center;color:var(--text-dim);font-size:13px;
+}
+footer .done{
+  display:inline-flex;align-items:center;gap:10px;
+  margin-bottom:10px;padding:10px 22px;border-radius:999px;
+  background:var(--accent-soft);border:1px solid rgba(91,141,255,.35);
+  color:var(--accent-strong);font-weight:700;font-size:14px;
+}
+footer .done svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+/* ===== Lightbox ===== */
+.lightbox{
+  position:fixed;inset:0;z-index:200;display:none;
+  align-items:center;justify-content:center;
+  background:rgba(5,7,10,.92);
+}
+.lightbox.open{display:flex}
+.lb-frame{max-width:min(1080px,92vw);max-height:88vh;position:relative}
+.lb-frame img{display:block;max-width:100%;max-height:88vh;border-radius:8px;border:1px solid var(--border)}
+.lb-btn{
+  position:fixed;top:50%;transform:translateY(-50%);
+  width:46px;height:46px;border-radius:50%;
+  border:1px solid var(--border);background:rgba(14,17,22,.8);color:var(--text);
+  font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .15s ease;
+}
+.lb-btn:hover{background:var(--accent);color:#0E1116;border-color:var(--accent)}
+.lb-btn.prev{left:18px}
+.lb-btn.next{right:18px}
+.lb-close{
+  position:fixed;top:18px;right:20px;
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--border);background:rgba(14,17,22,.8);color:var(--text);
+  font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .15s ease;
+}
+.lb-close:hover{background:#E5484D;border-color:#E5484D;color:#fff}
+.lb-caption{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  color:var(--text-dim);font-size:14px;background:rgba(14,17,22,.8);
+  padding:6px 16px;border-radius:999px;border:1px solid var(--border);white-space:nowrap;
+}
+/* ===== 响应式 ===== */
+@media (max-width:640px){
+  .hero{padding:72px 20px 52px}
+  .step{padding:34px 0}
+  .step-head{gap:14px}
+  .step-num{width:44px;height:44px;border-radius:11px;font-size:16px}
+  main{padding:36px 20px 16px}
+  .step-nav a{width:44px;height:44px}
+  .lb-btn.prev{left:6px}
+  .lb-btn.next{right:6px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+<div id="progressBar"></div>
+
+<header class="hero">
+  <span class="badge"><span class="dot"></span>Clash Party · 新手图文教程</span>
+  <h1>Clash Party 导入订阅完整教程</h1>
+  <p class="sub">从首次启动到订阅导入成功，照着截图一步步操作，几分钟就能把机场订阅配置好。</p>
+  <div class="meta">
+    <span><svg viewBox="0 0 24 24"><path d="M9 6h10a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z"/><path d="M5 10v9"/></svg>共 6 步</span>
+    <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>约 2 分钟</span>
+    <span><svg viewBox="0 0 24 24"><path d="M3 12h4l2-6 4 12 2-6h4"/></svg>点击截图可放大</span>
+  </div>
+  <a class="start-btn" href="#step-1">开始学习</a>
+</header>
+
+<nav class="step-nav" aria-label="步骤导航" id="stepNav">
+  <a href="#step-1">1</a>
+  <a href="#step-2">2</a>
+  <a href="#step-3">3</a>
+  <a href="#step-4">4</a>
+  <a href="#step-5">5</a>
+  <a href="#step-6">6</a>
+</nav>
+
+<main>
+  <!-- ===== 步骤 1 ===== -->
+  <section class="step" id="step-1" data-title="选择配置模式">
+    <div class="step-head">
+      <div class="step-num">01</div>
+      <div>
+        <h2>选择配置模式</h2>
+        <p class="desc">首次启动 Clash Party，会弹出「选择配置模式」窗口，在<b>标准模式</b>与<b>简易模式</b>中二选一。初次使用推荐选「简易模式」，之后可随时在设置中切换，DNS、TUN 等设置在两种模式中共用。</p>
+      </div>
+    </div>
+    <figure class="shot" data-step="0">
+      <img src="assets/1.png" alt="步骤1：选择配置模式弹窗" loading="lazy">
+      <span class="zoom-hint"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>点击放大</span>
+    </figure>
+  </section>
+
+  <!-- ===== 步骤 2 ===== -->
+  <section class="step" id="step-2" data-title="熟悉欢迎教程">
+    <div class="step-head">
+      <div class="step-num">02</div>
+      <div>
+        <h2>熟悉欢迎教程</h2>
+        <p class="desc">软件会弹出交互式使用教程（共 15 步）。如果已经熟悉操作，直接点击右上角<b>关闭按钮</b>跳过即可；想了解功能也可以跟着教程走，之后随时可在设置中重新打开。</p>
+      </div>
+    </div>
+    <figure class="shot" data-step="1">
+      <img src="assets/2.png" alt="步骤2：欢迎使用 Clash Party 教程弹窗" loading="lazy">
+      <span class="zoom-hint"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>点击放大</span>
+    </figure>
+  </section>
+
+  <!-- ===== 步骤 3 ===== -->
+  <section class="step" id="step-3" data-title="打开空白配置">
+    <div class="step-head">
+      <div class="step-num">03</div>
+      <div>
+        <h2>打开「空白配置」</h2>
+        <p class="desc">点击左侧导航栏的<b>「空白配置（本地）」</b>，进入配置管理页面，这里就是订阅管理入口。</p>
+      </div>
+    </div>
+    <figure class="shot" data-step="2">
+      <img src="assets/3.png" alt="步骤3：点击左侧导航栏的空白配置" loading="lazy">
+      <span class="zoom-hint"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>点击放大</span>
+    </figure>
+  </section>
+
+  <!-- ===== 步骤 4 ===== -->
+  <section class="step" id="step-4" data-title="粘贴订阅链接">
+    <div class="step-head">
+      <div class="step-num">04</div>
+      <div>
+        <h2>粘贴订阅链接</h2>
+        <p class="desc">进入<b>「订阅管理」</b>页面后，将机场提供的订阅链接复制、粘贴到输入框中，并勾选<b>「代理」</b>选项。</p>
+      </div>
+    </div>
+    <figure class="shot" data-step="3">
+      <img src="assets/4.png" alt="步骤4：把订阅链接粘贴到订阅管理输入框" loading="lazy">
+      <span class="zoom-hint"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>点击放大</span>
+    </figure>
+  </section>
+
+  <!-- ===== 步骤 5 ===== -->
+  <section class="step" id="step-5" data-title="点击导入">
+    <div class="step-head">
+      <div class="step-num">05</div>
+      <div>
+        <h2>点击「导入」</h2>
+        <p class="desc">确认订阅链接无误后，点击蓝色<b>「导入」</b>按钮，开始拉取订阅内容。</p>
+      </div>
+    </div>
+    <figure class="shot" data-step="4">
+      <img src="assets/5.png" alt="步骤5：点击导入按钮导入订阅" loading="lazy">
+      <span class="zoom-hint"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>点击放大</span>
+    </figure>
+  </section>
+
+  <!-- ===== 步骤 6 ===== -->
+  <section class="step" id="step-6" data-title="导入完成">
+    <div class="step-head">
+      <div class="step-num">06</div>
+      <div>
+        <h2>导入完成，开始使用</h2>
+        <p class="desc">导入成功，界面提示「ok了」，订阅卡片随即出现（例如：<b>良心云 · 57.72 GB / 1.00 TB · 长期有效</b>）。回到「代理组与节点」即可选择节点开始使用。</p>
+      </div>
+    </div>
+    <figure class="shot" data-step="5">
+      <img src="assets/6.png" alt="步骤6：订阅导入成功显示良心云订阅信息" loading="lazy">
+      <span class="zoom-hint"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>点击放大</span>
+    </figure>
+  </section>
+
+  <footer>
+  <div class="done"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>订阅导入完成，可以开始使用了</div>
+  <p>本教程截图由 Clash Party Windows 客户端实际界面生成 · 共 6 步</p>
+</footer>
+</main>
+
+<!-- ===== Lightbox ===== -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="图片放大查看">
+  <button class="lb-close" id="lbClose" aria-label="关闭">&times;</button>
+  <button class="lb-btn prev" id="lbPrev" aria-label="上一张">&#8249;</button>
+  <div class="lb-frame"><img id="lbImg" src="" alt="放大查看"></div>
+  <button class="lb-btn next" id="lbNext" aria-label="下一张">&#8250;</button>
+  <div class="lb-caption" id="lbCaption"></div>
+</div>
+
+<script>
+// ===== 滚动进度条 =====
+(function(){
+  var bar = document.getElementById('progressBar');
+  function update(){
+    var h = document.documentElement;
+    var total = h.scrollHeight - h.clientHeight;
+    bar.style.width = (total > 0 ? (h.scrollTop / total) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+
+// ===== 当前步骤高亮（导航） =====
+(function(){
+  var links = document.querySelectorAll('.step-nav a');
+  var steps = document.querySelectorAll('.step');
+  var map = {};
+  for (var i = 0; i < steps.length; i++) map['#step-' + (i + 1)] = links[i];
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting && map['#' + e.target.id]) {
+        for (var i = 0; i < links.length; i++) links[i].classList.remove('active');
+        map['#' + e.target.id].classList.add('active');
+      }
+    });
+  }, {rootMargin:'-40% 0px -55% 0px'});
+  steps.forEach(function(s){ io.observe(s); });
+})();
+
+// ===== 图片点击放大（Lightbox） =====
+(function(){
+  var shots = Array.prototype.slice.call(document.querySelectorAll('.shot'));
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbCaption = document.getElementById('lbCaption');
+  var titles = shots.map(function(s){ return document.getElementById(s.parentNode.id ? s.closest('.step').id : 'step-1').getAttribute('data-title'); });
+  var idx = 0;
+  function show(i){
+    idx = (i + shots.length) % shots.length;
+    var img = shots[idx].querySelector('img');
+    lbImg.src = img.getAttribute('src');
+    lbImg.alt = img.getAttribute('alt');
+    lbCaption.textContent = '第 ' + (idx + 1) + ' / 6 步 · ' + titles[idx];
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close(){
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  shots.forEach(function(s, i){
+    s.addEventListener('click', function(){ show(i); });
+  });
+  document.getElementById('lbClose').addEventListener('click', close);
+  document.getElementById('lbPrev').addEventListener('click', function(e){ e.stopPropagation(); show(idx - 1); });
+  document.getElementById('lbNext').addEventListener('click', function(e){ e.stopPropagation(); show(idx + 1); });
+  lb.addEventListener('click', function(e){ if (e.target === lb) close(); });
+  document.addEventListener('keydown', function(e){
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'ArrowRight') show(idx + 1);
+  });
+})();
+</script>
+</body>
+</html>
